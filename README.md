@@ -23,8 +23,9 @@ You can learn more [here](https://docs.python.org/3/library/venv.html#creating-v
 $ pip install xml2rfc
 ```
 
-Then in order to confirm the installation, you can try running
+Then in order to confirm the installation, you can try running `kdrfc` command, this command compiles the markdown file into `.xml` and into `.txt.` in one go.
+Basically it runs `kramdown-rfc` followed by `xml2rfc` in the background.
 ```bash
-$ kdrfc .md
+$ kdrfc test.md
 ```
 If you see the txt output created and message in the terminal then it is working properly and you are good to go.
