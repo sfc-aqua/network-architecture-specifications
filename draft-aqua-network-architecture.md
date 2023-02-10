@@ -26,6 +26,16 @@ author:
 
 normative:
   RFC2119:
+  I-D.setup:
+    target: https://github.com/sfc-aqua/draft-quantum-connection-setup
+    title: Connection Setup in a Quantum Network
+    author:
+      name: Rodney Van Meter
+      ins: R. Van Meter
+    author:
+      name: Takaaki Matsuo
+      ins: T. Matsuo
+    date: 2021-03-18
 
 informative:
   RFC9340:
@@ -37,11 +47,50 @@ informative:
       name: Ryosuke Satoh
       ins: R. Satoh
     date: 2023-02-01
+  rdv-qce-arch:
+    target: https://arxiv.org/abs/2112.07092
+    title: A Quantum Internet Architecture
+    author:
+      -
+        name: Rodney Van Meter
+        ins: R. Van Meter
+        org: AQUA
+      -
+        name: Ryosuke Satoh
+        ins: R. Satoh
+        org: AQUA
+      -
+        name: Naphan Benchasattabuse
+        ins: N. Benchasattabuse
+        org: AQUA
+      -
+        name: Takaaki Matsuo
+        ins: T. Matsuo
+        org: AQUA
+      -
+        name: Michal Hajdušek
+        ins: M. Hajdušek
+        org: AQUA
+      -
+        name: Takahiko Satoh
+        ins: T. Satoh
+        org: AQUA
+      -
+        name: Shota Nagayama
+        ins: S. Nagayama
+        org: AQUA
+      -
+        name: Shigeya Suzuki
+        ins: S. Suzuki
+        org: AQUA
+    date: 2021-12-14
 
 --- abstract
 
 A RuleSet-based quantum network architecture is described.
 
+This architecture document does not cover internetworking, but is
+internetworking-ready.
 
 --- middle
 
@@ -69,6 +118,9 @@ Rules determine the actions to be executed on one or more quantum
 states by quantum network nodes.  Rules are collected into RuleSets.
 At a Node, each connection is governed by a RuleSet.
 
+A DistRuleSet is the set of all RuleSets governing the operation of a
+connection, at all nodes.
+
 The detailed syntax and semantics of Rules and RuleSets are out of
 scope for this document.  See {{cocori-ms-thesis}}.
 
@@ -89,6 +141,7 @@ Rule identifiers
 
 The scope for a RuleID is the DistRuleSet.
 
+
 RuleSet identifiers
 -------------------
 
@@ -97,18 +150,30 @@ RuleSet identifiers
 Quantum state tags
 ------------------
 
-Quantum network nodes build shared quantum states.
-Every quantum state that is operated on based on the contents of a
-message received from some partner, therefore, MUST have a TAG that
-can be referred to, serving as the name for the state.
+Quantum network nodes build end-to-end shared quantum states to
+delivered to applications, by using partial quantum states.  Nodes
+exchange messages to facilitate this process.  Every quantum state
+that is operated on based on the contents of a message received from
+some partner, therefore, MUST have a TAG that can be referred to,
+serving as the name for the state.
 
-The TAG MUST be unique within a defined scope.  As a state,
-instantiated locally as one or more qubits, belongs, to a RULE, the
-scope for the tag is the RULE.
+The TAG MUST be unique within a defined scope.  A state instantiated
+locally as one or more qubits belongs to a RULE. The scope for the tag
+is the RULE.
+
+The contents of the TAG MAY be opaque to partner nodes, but a
+receiving Node MUST be able to map the TAG to the physical qubit or
+qubits currently holding the state.
 
 
 Node type definitions
 =====================
+
+The first architecture concerns only four types of Nodes, described
+below.  Eight more types of nodes have been defined in the research
+literature and will be incorporated in future specifications
+{{rdv-qce-arch}}.
+
 
 MEAS
 ----
