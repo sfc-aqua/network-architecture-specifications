@@ -24,9 +24,6 @@ author:
 
 normative:
   RFC2119:
-  RFC3986:
-  RFC4086:
-  RFC4648:
 
 informative:
   RFC9340:
@@ -71,10 +68,10 @@ EPPS
 ----
 
 BSA
----
+----
 
 OSW
----
+----
 
 
 Common node requirements
@@ -109,8 +106,19 @@ White Rabbit absolute and relative clock synchronization
 Timing regimes
 ==============
 
-See Document 501 for an overview. To be developed in conjunction with hardware and software members of the Nagayama Project.
+The detailed operation of the interconnect at both the link and network levels involves hardware and software signals and events across many orders of magnitude difference in required latency. Some of the timing regimes are:
 
+* interferometric stabilization: need for sub-wavelength stability is photonic qubit representation-dependent
+* photon wave packet overlap: technology-dependent photon wave packet length, but roughly nanoseconds
+* opening and closing of detector timing windows, detector recovery time: nanoseconds to microseconds
+* measurement basis selection (if required in BSA): performance will constrain entanglement attempt rate
+* optical switch control: switching of trains of wave packets, performance will constrain multiplexing and entanglement attempt rate
+* pre-configured event-driven tasks such as timing-triggered or measurement-triggered execution of quantum circuits: microseconds
+* urgent but not synchronous-critical tasks (e.g., execution of classical code that processes RuleSet messages and selects or creates new quantum circuits for execution): microseconds
+* host-side application-level tasks (e.g. post-measurement operations): milliseconds
+* background tasks (link tomography calculations, routing table updates): seconds to minutes
+
+Some of these can only be achieved using high-quality hardware, while others are software tasks. Detailed analysis of these regimes will affect core software design in each network node type.
 
 Quantum Router Software Architecture (QRSA)
 ===========================================
