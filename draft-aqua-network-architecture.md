@@ -1,7 +1,7 @@
 ---
 title: Quantum Network Architecture
 abbrev: QNA
-docname: draft-aqua-network-architecture
+docname: draft-aqua-network-architecture-00
 date: 2023-02-10
 category: info
 
@@ -36,6 +36,12 @@ normative:
       name: Takaaki Matsuo
       ins: T. Matsuo
     date: 2021-03-18
+  marchese-tannenbaum-van-steen-summary:
+    target: https://csis.pace.edu/~marchese/CS865/Lectures/Chap5/Chapter5a.htm
+    title: CS865 – Distributed Software Development, Lecture 5, Tannenbaum and Van Steen – Chapter 5
+    author:
+      name: Francis T. Marchese
+      ins: F. T. Marchese
 
 informative:
   RFC9340:
@@ -93,8 +99,8 @@ This architecture document does not cover internetworking, but is
 internetworking-ready.
 
 The common use case for this network is the creation of Bell pairs,
-bipartite states with one qubit at one EndNode and one qubit and
-another EndNode.  The architecture, but not necessarily the initial
+bipartite states with one qubit at one EndQNode and one qubit and
+another EndQNode.  The architecture, but not necessarily the initial
 instances of all underlying protocols, supports multi-partite states
 shared among more than two nodes.
 
@@ -102,6 +108,18 @@ shared among more than two nodes.
 
 Introduction        {#intro}
 ============
+
+A QNode on a quantum network has at least one interface that accepts or
+emits quantum states to be shared with other QNodes.  Typically, but
+not always, that interface will be optical.  This document assumes the
+use of photons, described as quantum wave packets, for quantum
+communication, and includes constraints on them.
+
+Each QNode is controlled by one classical controller known as a CNode.
+A single CNode MAY control more than one QNode.
+
+Many operations require that CNodes within a quantum network
+communicate with each other.  That communication MAY be via TCP/IP.
 
 
 Glossary
@@ -111,7 +129,7 @@ Glossary
 * Connection
 * DistRuleSet
 * Link
-* Node
+* QNode
 * Rule
 * RuleSet
 * Stage
@@ -125,7 +143,7 @@ Rules and RuleSets
 
 Rules determine the actions to be executed on one or more quantum
 states by quantum network nodes.  Each Rule has a Condition Clause and
-an Action Clause. Rules are collected into RuleSets.  At a Node, each
+an Action Clause. Rules are collected into RuleSets.  At a QNode, each
 connection is governed by a RuleSet.
 
 A DistRuleSet is the set of all RuleSets governing the operation of a
@@ -137,9 +155,25 @@ scope for this document.  See {{cocori-ms-thesis}}.
 Naming and identifiers
 ======================
 
-Nodes
+QNodes
 -----
 
+A QNode MUST have a identifier
+{{marchese-tannenbaum-van-steen-summary}}.  The identifier MUST be
+unique within the corresponding scope.  A QNode MUST have only one
+identifier within a given scope.  A QNode MAY participate in more than
+one scope.  This identifier is the QNodeID.
+
+It is NOT RECOMMENDED that IP addresses be used unmodified as QNodeIDs.
+A single host on an IP network can have multiple IP addresses on which
+it can receive messages about a single attached quantum QNode, so
+multiple identifiers would correspond to the same QNode.  A single host
+on an IP network can serve as the classical control for multiple
+quantum QNodes, so an IP address as QNodeID also would not uniquely
+specify the correct QNode.
+
+An IP address MAY form part of the QNodeID.
+  
 Channels and links
 --------------
 
@@ -165,7 +199,7 @@ Quantum state tags
 ------------------
 
 Quantum network nodes build end-to-end shared quantum states to
-delivered to applications, by using partial quantum states.  Nodes
+delivered to applications, by using partial quantum states.  QNodes
 exchange messages to facilitate this process.  Every quantum state
 that is operated on based on the contents of a message received from
 some partner, therefore, MUST have a TAG that can be referred to,
@@ -176,7 +210,7 @@ locally as one or more qubits belongs to a RULE. The scope for the tag
 is the RULE.
 
 The contents of the TAG MAY be opaque to partner nodes, but a
-receiving Node MUST be able to map the TAG to the physical qubit or
+receiving QNode MUST be able to map the TAG to the physical qubit or
 qubits currently holding the state.
 
 A TAG MAY be a simple sequence number, provided that sequence numbers
@@ -188,17 +222,32 @@ AllSwap.
 
 
 
-Node type definitions
+Classes of QNodes
+=================
+
+* QEndNode
+* QRepeaterNode
+* QSupportNode
+
+QEndNode type definitions
 =====================
 
-The first architecture concerns only four types of Nodes, described
+The first architecture concerns only four types of QNodes, described
 below.  Eight more types of nodes have been defined in the research
 literature and will be incorporated in future specifications
 {{rdv-qce-arch}}.
 
-
 MEAS
 ----
+
+QRepeaterNode type definitions
+=============================
+
+No QRepeaterNode types are defined in this document.
+
+
+QSupportNode type definitions
+=============================
 
 EPPS
 ----
@@ -256,7 +305,7 @@ Subsets of the QRSA functionality are implemented in dfferent ways for
 different node types.  Not all node types are required to implement
 all functions.
 
-Timing regimes
+Timing regimes {#timing}
 ==============
 
 The detailed operation of the interconnect at both the link and network levels involves hardware and software signals and events across many orders of magnitude difference in required latency. Some of the timing regimes are:
@@ -322,13 +371,31 @@ Signalling for circuit switching
 --------------------------
 
 
-Timeouts and Race Conditions
+Classical communication
+=======================
+
+Many operations require that CNodes within a quantum network
+communicate with each other.  The different levels of timing
+constraint described in {{timing}} correspond to classical
+communication requirements.
+
+Some communication MAY be via TCP/IP.
+
+Some communication requires control messages with timing that is
+indistinguishable from one or more corresponding quantum signals
+carried in a quantum channel.  The more straightforward implementation
+will be to carry such signals in the same physical channel,
+multiplexed by time, wavelength, or similar approaches.
+
+Classical heralding of WavePacket timing.
+
+Timeouts and race conditions
 ============================
 
 Security
 ========
 
-Node security
+QNode security
 --------------------------
 
 Protocol security
