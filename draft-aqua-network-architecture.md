@@ -26,6 +26,8 @@ author:
 
 normative:
   RFC2119:
+  RFC5151:
+  RFC6001:
   I-D.setup:
     target: https://github.com/sfc-aqua/draft-quantum-connection-setup
     title: Connection Setup in a Quantum Network
@@ -119,7 +121,11 @@ Each QNode is controlled by one classical controller known as a CNode.
 A single CNode MAY control more than one QNode.
 
 Many operations require that CNodes within a quantum network
-communicate with each other.  That communication MAY be via TCP/IP.
+communicate with each other.  That communication MAY be via TCP/IP or
+via low-level digital or analog signals, depending on context.
+
+A quantum state is assigned to a Rule within a RuleSet immediately
+upon creation.  A state always belongs to exactly one Rule.
 
 
 Glossary
@@ -148,6 +154,8 @@ connection is governed by a RuleSet.
 
 A DistRuleSet is the set of all RuleSets governing the operation of a
 connection, at all nodes.
+
+RuleSets do not specify routing, multiplexing or security.
 
 The detailed syntax and semantics of Rules and RuleSets are out of
 scope for this document.  See {{cocori-ms-thesis}}.
@@ -277,8 +285,20 @@ Neighbor discovery and type determination
 Routing
 -------
 
-Multiplexing
+Relationship to multiplexing?
+
+Multiplexing and resource reservation
 ------------
+
+Multiplexing refers to the implementation of sharing of resources on a
+link or path.  Resource reservation refers to policy decisions about
+connection admission.
+
+Resource Reservation Protocol - Traffic Engineering (RSVP-TE) will be
+adapted for connection admission and managing available link and path
+resources {{RFC5151}}{{RFC6001}}.
+
+Relationship to routing?
 
 Bipartite connection setup and teardown
 -----------------------------
@@ -299,11 +319,23 @@ visible functionality, rather than mandating an implementation.  The
 Quantum Router Software Architecture (QRSA) is the name of a reference
 software implementation that conforms to this behavioral
 specification, particularly the common node requirements described in
-{{node-req}}.
+{{node-req}}.  The QRSA runs on each CNode that controls one or more
+QNodes.
 
 Subsets of the QRSA functionality are implemented in dfferent ways for
 different node types.  Not all node types are required to implement
 all functions.
+
+The QRSA comprises the following five modules:
+
+* routing daemon
+* connection manager
+* RuleEngine
+* hardware monitor
+* RealTime hardware drivers
+
+All of these except the real-time hardware drivers communicate with
+other CNodes.
 
 Timing regimes {#timing}
 ==============
