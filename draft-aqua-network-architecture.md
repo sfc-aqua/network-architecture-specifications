@@ -48,6 +48,21 @@ normative:
 informative:
   RFC9340:
   I-D.draft-irtf-qirg-principles:
+  wehner-science:
+    target: https://www.science.org/doi/10.1126/science.aam9288
+    title: Quantum internet A vision for the road ahead
+    author:
+      -
+        name: Stephanie Wehner
+	ins: S. Wehner
+      -
+        name: David Elkouss
+	ins: D. Elkouss
+      -
+        name: Ronald Hanson
+	ins: R. Hanson
+    journal: Science
+    date: 2018-10-19
   cocori-ms-thesis:
     target: TBD
     title: RuLa A Programming Language for RuleSet-based Quantum Repeaters
@@ -92,10 +107,57 @@ informative:
         ins: S. Suzuki
         org: AQUA
     date: 2021-12-14
+  altepeter-tomography:
+    target: TBD
+    title: Photonic state tomography
+    author:
+      -
+        name: Joseph B Altepeter
+        ins: J. B. Altepeter
+      -
+        name: Evan R Jeffrey
+        ins: E. R. Jeffrey
+      -
+        name: Paul G Kwiat
+        ins: P. G. Kwiat
+    journal: Advances in Atomic, Molecular, and Optical Physics
+    volume: 52
+    pages: 105--159
+    date: 2005
+  eisert-certification:
+    title: Quantum certification and benchmarking
+    author:
+      name: Eisert, Jens and Hangleiter, Dominik and Walk, Nathan and Roth, Ingo and Markham, Damian and Parekh, Rhea and Chabaud, Ulysse and Kashefi, Elham
+      ins: J. Eisert
+    journal: Nature Reviews Physics
+    volume: 2
+    number: 7
+    pages: 382--390
+    date: 2020
+  oka-qcit:
+    title: A Classical Network Protocol to Support Distributed Quantum State Tomography
+    author:
+      -
+        name: Takafumi Oka
+        ins: T. Oka
+      -
+        name: Takahiko Satoh
+	ins: T. Satoh
+      -
+        name: Rodney Van Meter
+	ins: R. Van Meter
+    booktitle: Proc. Quantum Communications and Information Technology
+    date: 2016-12-01
 
 --- abstract
 
 A RuleSet-based quantum network architecture is described.
+
+This network architecture provides entanglement as a service.
+Applications may treat a network based on this architecture as
+_prepare and measure_ or _entanglement generation_ stages of quantum
+network evolution before nodes with memory are deployed, or a _quantum
+memory_ network or above as memory nodes are deployed.
 
 This architecture document does not cover internetworking, but is
 internetworking-ready.
@@ -124,13 +186,16 @@ Many operations require that CNodes within a quantum network
 communicate with each other.  That communication MAY be via TCP/IP or
 via low-level digital or analog signals, depending on context.
 
-A quantum state is assigned to a Rule within a RuleSet immediately
-upon creation.  A state always belongs to exactly one Rule.
+A quantum state known as a BasePair is assigned to a Rule within a
+RuleSet immediately upon creation.  A state always belongs to exactly
+one Rule.
 
 
 Glossary
 ========
 
+* BasePair: an entangled two-qubit state established across a physical
+  link.
 * Channel
 * Connection
 * DistRuleSet
@@ -143,6 +208,19 @@ Glossary
 * Tag
 * WavePacket
 * WavePacketTrain
+
+Supported applications
+======================
+
+Using the Wehner-Elkouss-Hanson taxonomy, prepare and measure networks
+provide functionality sufficient for quantum key distribution and
+secure identification {{wehner-science}}.  Entanglement generation
+networks provide functionality sufficient for device-independent
+protocols.  Quantum memory networks provide functionality sufficient
+for a limited form of blind quantum computation and simple leader
+election protocols.  Once quantum error correction is included,
+networks become sufficient for all forms of distributed quantum
+computing.
 
 Rules and RuleSets
 ==================
@@ -292,7 +370,9 @@ Multiplexing and resource reservation
 
 Multiplexing refers to the implementation of sharing of resources on a
 link or path.  Resource reservation refers to policy decisions about
-connection admission.
+connection admission.  Because quantum states are owned by a Rule,
+which belongs to a Connection, multiplexing is applied only to
+BasePairs to assign them to a Connection.
 
 Resource Reservation Protocol - Traffic Engineering (RSVP-TE) will be
 adapted for connection admission and managing available link and path
@@ -308,6 +388,12 @@ Bipartite connection setup and teardown
 
 White Rabbit absolute and relative clock synchronization
 --------------------------------------------------------
+
+Link characterization
+---------------------
+
+Each Link must be characterized using a bilateral process such as
+tomography {{altepeter-tomography}}{{oka-qcit}}{{eisert-certification}}.
 
 Quantum Router Software Architecture (QRSA)
 ===========================================
