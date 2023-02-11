@@ -92,6 +92,12 @@ A RuleSet-based quantum network architecture is described.
 This architecture document does not cover internetworking, but is
 internetworking-ready.
 
+The common use case for this network is the creation of Bell pairs,
+bipartite states with one qubit at one EndNode and one qubit and
+another EndNode.  The architecture, but not necessarily the initial
+instances of all underlying protocols, supports multi-partite states
+shared among more than two nodes.
+
 --- middle
 
 Introduction        {#intro}
@@ -108,15 +114,19 @@ Glossary
 * Node
 * Rule
 * RuleSet
+* Stage
 * State
 * Tag
+* WavePacket
+* WavePacketTrain
 
 Rules and RuleSets
 ==================
 
 Rules determine the actions to be executed on one or more quantum
-states by quantum network nodes.  Rules are collected into RuleSets.
-At a Node, each connection is governed by a RuleSet.
+states by quantum network nodes.  Each Rule has a Condition Clause and
+an Action Clause. Rules are collected into RuleSets.  At a Node, each
+connection is governed by a RuleSet.
 
 A DistRuleSet is the set of all RuleSets governing the operation of a
 connection, at all nodes.
@@ -139,13 +149,17 @@ Connection identifiers
 Rule identifiers
 ----------------
 
+A RuleID identifies a specific Rule within a RuleSet.
+
 The scope for a RuleID is the DistRuleSet.
 
 
 RuleSet identifiers
 -------------------
 
+A RuleSetID identifies a specific RuleSet.
 
+The scope of the RuleSetID is...
 
 Quantum state tags
 ------------------
@@ -164,6 +178,14 @@ is the RULE.
 The contents of the TAG MAY be opaque to partner nodes, but a
 receiving Node MUST be able to map the TAG to the physical qubit or
 qubits currently holding the state.
+
+A TAG MAY be a simple sequence number, provided that sequence numbers
+are unique and are not reused over the lifetime of the Connection.
+
+Rewriting of state tags.
+
+AllSwap.
+
 
 
 Node type definitions
@@ -188,7 +210,7 @@ OSW
 ----
 
 
-Common node requirements
+Common node requirements {#node-req}
 ========================
 
 Naming and addressing of nodes
@@ -209,7 +231,7 @@ Routing
 Multiplexing
 ------------
 
-Connection setup and teardown
+Bipartite connection setup and teardown
 -----------------------------
 
  (common portions)
@@ -217,6 +239,22 @@ Connection setup and teardown
 
 White Rabbit absolute and relative clock synchronization
 --------------------------------------------------------
+
+Quantum Router Software Architecture (QRSA)
+===========================================
+
+See Document 501 for an overview. To be adapted from existing QuISP documentation.
+
+This document specifies node requirements in terms of externally
+visible functionality, rather than mandating an implementation.  The
+Quantum Router Software Architecture (QRSA) is the name of a reference
+software implementation that conforms to this behavioral
+specification, particularly the common node requirements described in
+{{node-req}}.
+
+Subsets of the QRSA functionality are implemented in dfferent ways for
+different node types.  Not all node types are required to implement
+all functions.
 
 Timing regimes
 ==============
@@ -235,11 +273,6 @@ The detailed operation of the interconnect at both the link and network levels i
 
 Some of these can only be achieved using high-quality hardware, while others are software tasks. Detailed analysis of these regimes will affect core software design in each network node type.
 
-Quantum Router Software Architecture (QRSA)
-===========================================
-
-See Document 501 for an overview. To be adapted from existing QuISP documentation.
-n.b.: no nodes in this demonstration network are actually routers; QRSA is simply the name of the software suite. Subsets of the QRSA functionality are implemented in dfferent ways for different node types.
 
 MEAS
 ====
@@ -288,6 +321,9 @@ Role in photonic path synchronization negotiation
 Signalling for circuit switching
 --------------------------
 
+
+Timeouts and Race Conditions
+============================
 
 Security
 ========
