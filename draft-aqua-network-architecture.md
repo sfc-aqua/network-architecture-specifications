@@ -50,18 +50,19 @@ informative:
   I-D.draft-irtf-qirg-principles:
   wehner-science:
     target: https://www.science.org/doi/10.1126/science.aam9288
-    title: Quantum internet A vision for the road ahead
+    title: "Quantum internet: A vision for the road ahead"
     author:
       -
         name: Stephanie Wehner
-	ins: S. Wehner
+        ins: S. Wehner
       -
         name: David Elkouss
-	ins: D. Elkouss
+        ins: D. Elkouss
       -
         name: Ronald Hanson
-	ins: R. Hanson
-    journal: Science
+        ins: R. Hanson
+    seriesinfo:
+      "Science": "vol. 362, aam9288"
     date: 2018-10-19
   cocori-ms-thesis:
     target: TBD
@@ -142,10 +143,10 @@ informative:
         ins: T. Oka
       -
         name: Takahiko Satoh
-	ins: T. Satoh
+        ins: T. Satoh
       -
         name: Rodney Van Meter
-	ins: R. Van Meter
+        ins: R. Van Meter
     booktitle: Proc. Quantum Communications and Information Technology
     date: 2016-12-01
 
@@ -194,7 +195,7 @@ one Rule.
 Glossary
 ========
 
-* BasePair: an entangled two-qubit state established across a physical
+* *BasePair*: an entangled two-qubit state established across a physical
   link.
 * Channel
 * Connection
