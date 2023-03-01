@@ -381,6 +381,23 @@ resources {{RFC5151}}{{RFC6001}}.
 
 Relationship to routing?
 
+Challenge in starting connections with correct timing:
+
+The problem is a ruleset execution starts at node A and node A tries
+to send message to node B (while node B hasn't received/started the
+ruleset) and the message gets dropped (potentially there can be a
+mismatch in resource allocation as well when multiplexing is
+concerned).
+
+This is a design flaw, which should be addressed in the connection setup protocol itself.
+Currently, once the RuleSet is received at a node. The node will try
+to execute it right away. In certain instances, this will lead to the
+node trying to send a message to another node while that node still
+hasn't received the RuleSet. Thus, the message will not get recognized
+at the destination and the node will discard/ignore that message. This
+can lead to a certain type of deadlock behaviour.
+
+
 Bipartite connection setup and teardown
 -----------------------------
 
