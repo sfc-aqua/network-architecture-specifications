@@ -2,7 +2,7 @@
 title: Quantum Network Architecture
 abbrev: QNA
 docname: draft-aqua-network-architecture-00
-date: 2023-02-10
+date: 2023-03-15
 category: info
 
 ipr: trust200902
@@ -152,7 +152,10 @@ informative:
 
 --- abstract
 
-A RuleSet-based quantum network architecture is described.
+A first generation (1G) RuleSet-based quantum network architecture is
+described.  1G networks use an acknowledged link layer to handle loss
+of photons, entanglement swapping to extend entanglement over multiple
+hops, and purification for handling operational errors.
 
 This network architecture provides entanglement as a service.
 Applications may treat a network based on this architecture as
@@ -174,7 +177,17 @@ shared among more than two nodes.
 Introduction        {#intro}
 ============
 
-A QNode on a quantum network has at least one interface that accepts or
+Words such as MUST and MAY are used in this document as specified in
+RFC2119 {{RFC2119}}.
+
+The goal of a quantum network is to enable distributed quantum
+functions by distributing entangled quantum states
+{{I-D.draft-irtf-qirg-principles}}.  These states may be measured
+immediately upon arrival at the end nodes, or may be stored for
+further manipulation, processing and later measurement
+{{wehner-science}}.
+
+A *QNode* on a quantum network has at least one interface that accepts or
 emits quantum states to be shared with other QNodes.  Typically, but
 not always, that interface will be optical.  This document assumes the
 use of photons, described as quantum wave packets, for quantum
@@ -192,6 +205,23 @@ RuleSet immediately upon creation.  A state always belongs to exactly
 one Rule.
 
 
+2024 Network Goal
+========
+
+This network diagram doesn't really belong in a document about
+architecture, but this network is the target for the Moonshot in 2024.
+
+The network will consist of:
+
+* three End Nodes, each of which includes an entangled photon pair
+  source (EPPS) and measurement device capable of measuring in
+  multiple bases (MEAS)
+* one Switched Bell State Analyzer, consisting of an optical switch
+  (OSW) and one or more Bell State Analyzers (BSAs)
+
+Thus, priority for development of detailed specifications focuses on
+MEAS, EPPS, OSW and BSA functionality.
+
 Glossary
 ========
 
@@ -200,8 +230,10 @@ Glossary
 * Channel
 * Connection
 * DistRuleSet
+* Initiator
 * Link
 * QNode
+* Responder
 * Rule
 * RuleSet
 * Stage
@@ -223,15 +255,66 @@ election protocols.  Once quantum error correction is included,
 networks become sufficient for all forms of distributed quantum
 computing.
 
+Connections and connection management
+==================
+
+Distributed quantum services and applications depend upon the ability
+of a quantum network to create distributed entanglement.  In 1G
+networks, this distribution process requires the cooperation of all of
+the nodes along a path.  Therefore, quantum communication sessions are
+stateful, and are described as *Connections*.
+
+A Connection has the following characteristics:
+
+* It executes on a set of QNodes that is a subset of the nodes in a
+  quantum network.  Those nodes collectively form the *QPath*.  (A
+  QPath may be a single path or a multipath.)
+* It has an identifier.
+* It utilizes quantum resources.
+* It is governed by *Rules* collected into *RuleSets*.  The set of
+  RuleSets for a Connection is called a DistRuleSet.
+* It is created at the request of an *Initiator*.
+* The RuleSets are created and distributed by a *Responder* to all of
+  the nodes in the Connection.
+
+Phases of connection operation
+-----
+
+A Connection passes through three phases during its lifetime:
+
+* Connection setup: from the time the Initiator sends the request,
+  through the Responder's distribution of RuleSets, to the start of
+  real-time operations.  Connection setup messages and sub-phases are
+  described in a separate specification {{I-D.setup}}.
+* Execution: Real-time creation of distributed quantum states,
+  including execution of Rules and exchange of classical messages.
+* Shutdown: After completion of the quantum state creation and
+  operations, the Connection MUST be shut down and resources
+  recovered.
+
+Classical timeout and recovery
+-----
+
+When a QNode loses contact with one or more nodes with whom it must
+communicate during the Execution phase, after a timeout, it SHOULD
+tear down the Connection and recover any resources (e.g., memory or
+link utilization time slots) and return them to its free pool of
+resources for reassignment.  AAA behavior on classical timeout is
+undefined.
+
 Rules and RuleSets
 ==================
 
-Rules determine the actions to be executed on one or more quantum
-states by quantum network nodes.  Each Rule has a Condition Clause and
-an Action Clause. Rules are collected into RuleSets.  At a QNode, each
-connection is governed by a RuleSet.
+*Rules* determine the actions to be executed on one or more quantum
+states by quantum network nodes, with the goal of creating end-to-end
+entanglement for a particular connection.  Each Rule has a Condition
+Clause and an Action Clause.
 
-A DistRuleSet is the set of all RuleSets governing the operation of a
+Rules are collected into *RuleSets*.  At a QNode, each
+connection is governed by a RuleSet.  RuleSets are created by a
+Responder.
+
+A *DistRuleSet* is the set of all RuleSets governing the operation of a
 connection, at all nodes.
 
 RuleSets do not specify routing, multiplexing or security.
@@ -316,16 +399,34 @@ Classes of QNodes
 * QRepeaterNode
 * QSupportNode
 
-QEndNode type definitions
-=====================
 
 The first architecture concerns only four types of QNodes, described
 below.  Eight more types of nodes have been defined in the research
 literature and will be incorporated in future specifications
 {{rdv-qce-arch}}.
 
+QEndNode type definitions
+=====================
+
 MEAS
 ----
+
+A MEAS node measures single-photon states sent to it.  It MUST be able
+to measure in at least two bases, X and Z, either directly or by
+applying a single-qubit gate before measurement.  It SHOULD be able to
+switch between measurement bases on a per-measurement basis.
+
+Successful measurement of the photon MAY be probabilistic, and most
+likely will be low probability, when incorporating channel loss,
+coupling loss, and detector efficiency.  Control systems and protocols
+MUST be prepared for MEAS nodes to be probabilistic.
+
+The measurement operation MAY be noisy, i.e. error-prone; this is the
+expected case.  Link or device characterization processes such as
+tomography will be used as part of network monitoring.  This
+information MAY be used by network monitoring systems to declare a
+link operational or non-operational, and MAY be used by a Responder to
+plan RuleSets.
 
 QRepeaterNode type definitions
 =============================
@@ -525,7 +626,7 @@ multiplexed by time, wavelength, or similar approaches.
 
 Classical heralding of WavePacket timing.
 
-Timeouts and race conditions
+Protocol timeouts and race conditions
 ============================
 
 Security
@@ -543,4 +644,3 @@ Network Monitoring
 Collection and reporting of performance statistics
 
 --- back
-
