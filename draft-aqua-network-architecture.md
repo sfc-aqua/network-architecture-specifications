@@ -195,7 +195,7 @@ one Rule.
 
 
 <figure>
-<name>NMS View of Device State</name>
+<name>Planned First-Stage Network</name>
 <artset>
 <artwork type="svg" src="moonshot-local-network-switched-MIM.drawio.svg"/>
 <artwork type="ascii-art">
