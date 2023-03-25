@@ -48,22 +48,7 @@ normative:
 informative:
   RFC9340:
   I-D.draft-irtf-qirg-principles:
-  wehner-science:
-    target: https://www.science.org/doi/10.1126/science.aam9288
-    title: "Quantum internet: A vision for the road ahead"
-    author:
-      -
-        name: Stephanie Wehner
-        ins: S. Wehner
-      -
-        name: David Elkouss
-        ins: D. Elkouss
-      -
-        name: Ronald Hanson
-        ins: R. Hanson
-    seriesinfo:
-      "Science": "vol. 362, aam9288"
-    date: 2018-10-19
+  wehner-science: DOI.10.1126/science.aam9288
   cocori-ms-thesis:
     target: TBD
     title: RuLa A Programming Language for RuleSet-based Quantum Repeaters
@@ -208,6 +193,17 @@ one Rule.
 2024 Network Goal
 ========
 
+
+<figure>
+<name>NMS View of Device State</name>
+<artset>
+<artwork type="svg" src="https://www.rfc-editor.org/materials/format/svg/stream.svg "/>
+<artwork type="ascii-art">
+Artwork only available as SVG (PDF and HTML)
+</artwork>
+</artset>
+</figure>
+
 This network diagram doesn't really belong in a document about
 architecture, but this network is the target for the Moonshot in 2024.
 
@@ -227,14 +223,23 @@ Glossary
 
 * *BasePair*: an entangled two-qubit state established across a physical
   link.
-* Channel
-* Connection
-* DistRuleSet
-* Initiator
-* Link
+* *Channel*: the physical channel (optical fiber or free space) that
+  carries single-photon states.
+* *Connection*: the software and soft state at two or more nodes that
+  collectively works toward satisfying an application request for
+  shared, distributed entangled states.  A Connection has an identifier.
+* *DistRuleSet*: the set of RuleSets that collectively define a
+  Connection.  The set of all RuleSets that share the same ConnectionID.
+* *Initiator*: The node that creates a request for a connection.
+* *Link*: A quantum channel plus its end points, capable of creating
+  two-party entangled quantum states. A Link has characteristics such
+  as the rate at which it can attempt to make entanglement, the
+  success probability and fidelity.  n.b.: This is *not* a single
+  Bell pair. (n.b.2: But, a Link may be virtualized when recursive
+  networking is introduced.)
 * QNode
 * Responder
-* Rule
+* Rule: a Condition Clause-Action Clause pair
 * RuleSet
 * Stage
 * State
@@ -322,8 +327,12 @@ RuleSets do not specify routing, multiplexing or security.
 The detailed syntax and semantics of Rules and RuleSets are out of
 scope for this document.  See {{cocori-ms-thesis}}.
 
+suz: add example pseudocode here
+
 Naming and identifiers
 ======================
+
+suz: need to clarify what applies hop-by-hop and what is E2E.
 
 QNodes
 -----
@@ -641,6 +650,43 @@ Protocol security
 Network Monitoring
 ==================
 
-Collection and reporting of performance statistics
+Collection and reporting of performance statistics.
+
+Link Monitoring
+-----
+
+Monitoring is first done at the link level, between neighboring
+nodes.  Nodes MAY select their link quality and performance monitoring
+algorithm or method independently of other links in the network.
+
+Monitoring MAY be performed over more than a single hop, especially in
+a switched link configuration.
+
+The network monitoring system MAY declare a link up or down, for use
+by Connections.
+
+The following information MUST be reported by the link monitoring to
+the routing subsystem, which will report it to the Connect Manager for
+use in selecting paths and planning RuleSets:
+
+* Entanglement attempt rate
+* Entanglement success probability
+* Fidelity of entanglement
+
+Optional information that may be reported:
+
+* X Error rate
+* Z Error rate
+
+Quantum Network Node Discovery
+==============
+
+Nodes will discover the presence and capabilities of neighbors via a
+Quantum Network Node Discovery protocol.  Specification of this
+protocol is out of scope for this document.
+
+This protocol is designed for use by quantum nodes to discovery their
+neighbors, rather than for non-quantum nodes to discover the presence
+of quantum nodes.
 
 --- back
