@@ -197,7 +197,7 @@ one Rule.
 <figure>
 <name>NMS View of Device State</name>
 <artset>
-<artwork type="svg" src="https://www.rfc-editor.org/materials/format/svg/stream.svg "/>
+<artwork type="svg" src="moonshot-local-network-switched-MIM.drawio.svg"/>
 <artwork type="ascii-art">
 Artwork only available as SVG (PDF and HTML)
 </artwork>
