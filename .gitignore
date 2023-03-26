@@ -10,3 +10,5 @@ stupid-s.xml
 .refcache/computed-reference.DOI.10.1126_science.aam9288.xml
 *.xml
 *.md~
+*.txt
+*.html
