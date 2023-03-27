@@ -523,6 +523,27 @@ Link characterization
 Each Link must be characterized using a bilateral process such as
 tomography {{altepeter-tomography}}{{oka-qcit}}{{eisert-certification}}.
 
+Node Parameters
+======
+
+Correct operation of the network, including creation of RuleSets,
+requires that a set of parameters describing the operation of the node
+must be known by a set of nodes. The parameters may be implicitly
+known, or may be communicated from node to node.  These parameters
+fall into two categories: fixed or configured, and measured or
+monitored.  *Fixed* parameters are defined as part of a specification
+such as this document.  *Configured* parameters may be selected by the
+network or node administrator.  The first two sub-categories are
+different from the latter because they are known when the node is
+booted and do not, in general, change over time.
+
+Fixed/Configured
+-----
+
+
+Measured/Monitored
+-----
+
 Quantum Router Software Architecture (QRSA)
 ===========================================
 

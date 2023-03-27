@@ -1,6 +1,6 @@
 ---
-title: Quantum Network Architecture
-abbrev: QNA
+title: Quantum Measurement Network Node (MEAS)
+abbrev: QMEAS
 docname: draft-aqua-network-architecture-00
 date: 2023-03-15
 category: info
@@ -143,5 +143,57 @@ This specifies the behavior of the measurement (MEAS) quantum network node.
 
 Introduction        {#intro}
 ============
+
+A measurement node (MEAS) measures single-photon states received from
+an optical Channel.
+
+MEAS QEndNode type definition
+=====================
+
+A MEAS node measures single-photon states sent to it.  It MUST be able
+to measure in at least two bases, X and Z, either directly or by
+applying a single-qubit gate before measurement.  It SHOULD be able to
+switch between measurement bases on a per-measurement basis.  Basis
+selection may be either passive, or under software/hardware control.
+
+Successful measurement of the photon MAY be probabilistic, and most
+likely will be low probability, when incorporating channel loss,
+coupling loss, and detector efficiency.  Control systems and protocols
+MUST be prepared for MEAS nodes to be probabilistic.
+
+The measurement operation MAY be noisy, i.e. error-prone; this is the
+expected case.  Link or device characterization processes such as
+tomography will be used as part of network monitoring.  This
+information MAY be used by network monitoring systems to declare a
+link operational or non-operational, and MAY be used by a Responder to
+plan RuleSets.
+
+Parameters
+======
+
+Fixed
+-----
+
+The following parameters are implicit in the type of hardware selected
+and deployed.
+
+* Wavelength envelope
+* Accepted WavePacket format
+* PassiveActiveBasis
+
+Configured
+-----
+
+* Minimum inter-event interval
+
+Measured/Monitored
+-----
+
+* XMeasurementDroppedQubit
+* ZMeasurementDroppedQubit
+* XMeasurementDarkCount
+* ZMeasurementDarkCount
+* XasZMeasurementError
+* ZasXMeasurementError
 
 --- back
