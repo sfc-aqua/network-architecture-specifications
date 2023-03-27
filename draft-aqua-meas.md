@@ -168,6 +168,43 @@ information MAY be used by network monitoring systems to declare a
 link operational or non-operational, and MAY be used by a Responder to
 plan RuleSets.
 
+A MEAS MAY consist of more than one physical photon detector treated
+as a single unit, in order to detect two eigenstates of the same
+measurement basis or to measure in two bases.
+
+Active v. Passive Basis Selection
+-----
+
+Depending on the implementation of the quantum plane of the MEAS node,
+the measurement basis for individual operations MAY be either Active,
+under hardware and software control, or Passive, selected at random by
+a physical process such as the use of a beam splitter.
+
+For entangled photon pairs where both photons are being measured at
+independent MEAS nodes, the two nodes MAY differ in this respect.  One
+node may be Passive and the other Active.
+
+WavePackets and TimingWindows
+=====
+
+PHY Synchronization
+=====
+
+Synchronization of MEAS involves two major tasks:
+
+* coordinating the enabling and disabling of the physical detector
+  with the chosen DetectionWindow such that it overlaps with the
+  WavePacket
+* identifying the WavePacketTrain and the WavePacket such that events
+  are properly identified and reported to local software and/or the
+  photon transmitting nodes
+
+Timing Negotiation
+=====
+
+MEAS nodes MUST negotiate timing with nodes that transmit the photons
+to be measured.
+
 Parameters
 ======
 
@@ -184,7 +221,18 @@ and deployed.
 Configured
 -----
 
-* Minimum inter-event interval
+* *Minimum inter-photon interval* (MIPI): the minimum time between two
+  consecutive photon WavePackets in a WavePacketTrain.  Units are in
+  nanoseconds.  Specified as a floating point number.
+* Maximum WavePacketTrain length: the maximum number of WavePackets in
+  a single train.
+* Minimum inter-train interval: the minimum time between the end of
+  one WavePacketTrain, including the outer limits of the WavePacket
+  for the last photon, and the arrival of the Sync signal for the next
+  WavePacketTrain.
+* PhySyncOffset: the interval between the arrival of the physical
+  synchronization signal and the start of the first detector window.
+  Units are in nanoseconds.  Specified as a floating point number.
 
 Measured/Monitored
 -----
@@ -195,5 +243,6 @@ Measured/Monitored
 * ZMeasurementDarkCount
 * XasZMeasurementError
 * ZasXMeasurementError
+
 
 --- back

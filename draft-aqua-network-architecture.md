@@ -134,6 +134,7 @@ informative:
         ins: R. Van Meter
     booktitle: Proc. Quantum Communications and Information Technology
     date: 2016-12-01
+  pompili: DOI.10.1038/s41534-022-00631-2
 
 --- abstract
 
