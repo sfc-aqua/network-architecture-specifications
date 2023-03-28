@@ -1,7 +1,7 @@
 ---
 title: Quantum Measurement Network Node (MEAS)
 abbrev: QMEAS
-docname: draft-aqua-network-architecture-00
+docname: draft-aqua-meas-00
 date: 2023-03-28
 category: info
 
@@ -39,6 +39,13 @@ normative:
       name: Takaaki Matsuo
       ins: T. Matsuo
     date: 2021-03-18
+  QNA:
+    target: https://github.com/sfc-aqua/network-architecture-specifications
+    title: Quantum Network Architecture
+    author:
+      name: Rodney Van Meter
+      ins: R. Van Meter
+    date: 2023-03-18
   marchese-tannenbaum-van-steen-summary:
     target: https://csis.pace.edu/~marchese/CS865/Lectures/Chap5/Chapter5a.htm
     title: CS865 – Distributed Software Development, Lecture 5, Tannenbaum and Van Steen – Chapter 5
@@ -101,6 +108,15 @@ A MEAS MAY consist of more than one physical photon detector treated
 as a single unit, in order to detect two eigenstates of the same
 measurement basis or to measure in two bases.
 
+Node Requirements
+-----
+
+A MEAS node conforms to the following specifications:
+
+* Quantum Network Architecture [](#QNA)
+* Quantum Connection Setup Protocol [](#I-D.setup)
+* Quantum Rule Operations Protocol
+
 Photonic Qubit Representations
 -----
 
@@ -127,6 +143,16 @@ a physical process such as the use of a beam splitter.
 For entangled photon pairs where both photons are being measured at
 independent MEAS nodes, the two nodes MAY differ in this respect.  One
 node may be Passive and the other Active.
+
+Quantum Physical Layer
+=====
+
+The quantum physical layer, including parameters such as wavelength,
+channel type and loss, jitter in classical synchronization signals,
+etc. are beyond the scope of this document.  The following parameters
+and functions serve as the interface to the physical layer:
+
+* TBD
 
 Detection Events, WavePackets and TimingWindows
 =====
@@ -176,8 +202,8 @@ Synchronization of MEAS involves two major tasks:
 Timing Negotiation
 =====
 
-MEAS nodes MUST negotiate timing with nodes that transmit the photons
-to be measured.
+MEAS nodes MUST negotiate timing of the arrival of photons with nodes
+that transmit the photons to be measured.
 
 Parameters        {#params}
 ======
@@ -219,5 +245,65 @@ Measured/Monitored
 * XasZMeasurementError
 * ZasXMeasurementError
 
+Quantum Rule Operations Protocol Messages
+=====
+
+Messages sent and received by MEAS nodes conform to the
+Quantum Rule Operations Protocol (QROP) specification.
+
+Transmitted
+-----
+
+A MEAS sends the following QROP messages:
+
+* MeasurementResults
+
+Received
+----
+
+A MEAS receives the following QROP messages:
+
+* MeasurementResults
+
+Participation in Network Monitoring
+=====
+
+A MEAS node MUST cooperate with nodes that transmit photons in order
+to execute link characterization and monitoring.
+
+Link monitoring messages are exchanged as application-level messages,
+originated by the HardwareMonitor module of the QRSA [](QNA).
+
+Integration with Applications
+=====
+
+Because a MEAS is a QEndNode, applications running on classical
+systems may request quantum communication services from the node.
+
+These interfaces and applications are to be developed with the Sasaki,
+Satoh and Soeda groups.
+
+Example Deployments
+=====
+
+Unswitched MEAS-EPPS-MEAS Link
+-----
+
+Except for a single source and MEAS, this is the most basic
+configuration.  Timing in the path is selected to match the worst
+performance of the three nodes.
+
+Switched MEAS-OSW-EPPS-MEAS
+-----
+
+In a switched configuration, both timing and addressing/demultiplexing
+of messages are critical.
+
+Optical Entanglement Swapping MEAS-EPPS-BSA-EPPS-MEAS
+-----
+
+In a MEAS-EPPS-BSA-EPPS-MEAS path, the timing must be driven by the
+BSA node, in order to achieve appropriate synchronization of the
+arrival of overlapping photons.
 
 --- back
