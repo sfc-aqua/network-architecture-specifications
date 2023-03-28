@@ -70,11 +70,49 @@ informative:
 
 --- abstract
 
-This document specifies the Quantum Rule Operations Protocol.
+This document specifies the Quantum Rule Operations Protocol
+(pronounced "crop").  Rules govern the execution of quantum actions
+and the exchange of classical messages to create end-to-end entangled
+states for a Connection.  A Rule Action class can include the action
+of sending a classical message to a partner node.  A Rule Condition
+clause can be fulfilled by reception of such a classical message.
+This document specifies the syntax and semantics of the contents of
+those messages and the mechanisms for correct delivery of the
+messages.
 
 --- middle
 
 Introduction        {#intro}
 ============
+
+Connection-Oriented Operation
+=====
+
+Message reliability and ordering
+-----
+
+Messages are assumed to be reliable and delivered in order.
+
+Message Identifiers
+=====
+
+Resource Identifiers
+=====
+
+Quantum resources are identified according to the rules in [](#QNA).
+
+Data Types
+=====
+
+* boolean
+* integer
+* floating point number
+
+Common Message Types
+=====
+
+The following messages MUST be implemented by all QNodes:
+
+* TBD
 
 --- back
