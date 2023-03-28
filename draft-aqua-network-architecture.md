@@ -56,84 +56,10 @@ informative:
       name: Ryosuke Satoh
       ins: R. Satoh
     date: 2023-02-01
-  rdv-qce-arch:
-    target: https://arxiv.org/abs/2112.07092
-    title: A Quantum Internet Architecture
-    author:
-      -
-        name: Rodney Van Meter
-        ins: R. Van Meter
-        org: AQUA
-      -
-        name: Ryosuke Satoh
-        ins: R. Satoh
-        org: AQUA
-      -
-        name: Naphan Benchasattabuse
-        ins: N. Benchasattabuse
-        org: AQUA
-      -
-        name: Takaaki Matsuo
-        ins: T. Matsuo
-        org: AQUA
-      -
-        name: Michal Hajdušek
-        ins: M. Hajdušek
-        org: AQUA
-      -
-        name: Takahiko Satoh
-        ins: T. Satoh
-        org: AQUA
-      -
-        name: Shota Nagayama
-        ins: S. Nagayama
-        org: AQUA
-      -
-        name: Shigeya Suzuki
-        ins: S. Suzuki
-        org: AQUA
-    date: 2021-12-14
-  altepeter-tomography:
-    target: TBD
-    title: Photonic state tomography
-    author:
-      -
-        name: Joseph B Altepeter
-        ins: J. B. Altepeter
-      -
-        name: Evan R Jeffrey
-        ins: E. R. Jeffrey
-      -
-        name: Paul G Kwiat
-        ins: P. G. Kwiat
-    journal: Advances in Atomic, Molecular, and Optical Physics
-    volume: 52
-    pages: 105--159
-    date: 2005
-  eisert-certification:
-    title: Quantum certification and benchmarking
-    author:
-      name: Eisert, Jens and Hangleiter, Dominik and Walk, Nathan and Roth, Ingo and Markham, Damian and Parekh, Rhea and Chabaud, Ulysse and Kashefi, Elham
-      ins: J. Eisert
-    journal: Nature Reviews Physics
-    volume: 2
-    number: 7
-    pages: 382--390
-    date: 2020
-  oka-qcit:
-    title: A Classical Network Protocol to Support Distributed Quantum State Tomography
-    author:
-      -
-        name: Takafumi Oka
-        ins: T. Oka
-      -
-        name: Takahiko Satoh
-        ins: T. Satoh
-      -
-        name: Rodney Van Meter
-        ins: R. Van Meter
-    booktitle: Proc. Quantum Communications and Information Technology
-    date: 2016-12-01
+  rdv-qce-arch: DOI.10.1109/QCE53715.2022.00055
+  altepeter-tomography: DOI.10.1016/S1049-250X(05)52003-2
+  eisert-certification: DOI.10.1038/s42254-020-0186-4
+  oka-qcit: DOI.10.1109/GLOCOMW.2016.7848802
   pompili: DOI.10.1038/s41534-022-00631-2
 
 --- abstract
