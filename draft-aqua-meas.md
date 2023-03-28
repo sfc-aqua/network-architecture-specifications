@@ -2,9 +2,10 @@
 title: Quantum Measurement Network Node (MEAS)
 abbrev: QMEAS
 docname: draft-aqua-network-architecture-00
-date: 2023-03-15
+date: 2023-03-28
 category: info
 
+stream: independent
 ipr: trust200902
 area: Quantum
 workgroup: AQUA
@@ -47,7 +48,6 @@ normative:
 
 informative:
   RFC9340:
-  I-D.draft-irtf-qirg-principles:
   wehner-science: DOI.10.1126/science.aam9288
   cocori-ms-thesis:
     target: TBD
@@ -63,7 +63,8 @@ informative:
 
 --- abstract
 
-This specifies the behavior of the measurement (MEAS) quantum network node.
+This document specifies the behavior of the measurement (MEAS) quantum
+network node.
 
 --- middle
 
@@ -75,6 +76,8 @@ an optical Channel.
 
 MEAS QEndNode type definition
 =====================
+
+A MEAS node is a type of QEndNode, a quantum network end node.
 
 A MEAS node measures single-photon states sent to it.  It MUST be able
 to measure in at least two bases, X and Z, either directly or by
@@ -98,6 +101,21 @@ A MEAS MAY consist of more than one physical photon detector treated
 as a single unit, in order to detect two eigenstates of the same
 measurement basis or to measure in two bases.
 
+Photonic Qubit Representations
+-----
+
+A MEAS node is designed to work with a particular representation of a
+qubit.  The deployed optical path MUST either share a single photonic
+qubit representation, or include representation conversion to allow
+interoperation.  This choice is made at network hardware selection and
+deployment time, and is not under software control.  This
+specification supports the following photonic qubit representations:
+
+* polarization: by convention, the two single-qubit states are known
+  as horizontal and vertical polarization, written |H> and |V>.
+* time bin:  by convention, the two single-qubit states are known
+  as early and late, written |E> and |L>.
+
 Active v. Passive Basis Selection
 -----
 
@@ -110,8 +128,38 @@ For entangled photon pairs where both photons are being measured at
 independent MEAS nodes, the two nodes MAY differ in this respect.  One
 node may be Passive and the other Active.
 
-WavePackets and TimingWindows
+Detection Events, WavePackets and TimingWindows
 =====
+
+This document refers to "single photon", but a more accurate term is
+"wave packet".  A wave packet is the probability amplitude of the
+photon over a period of time.  The photon is localized in time and
+space when it is measured; that is, when the detector clicks.
+
+A wave packet has an envelope.  This envelope may be any shape, but in
+this architecture a WavePacket is defined to have a square shape of a
+defined duration.
+
+A single-photon detector MUST register a click only when the detector
+is enabled.  A detector MAY click due to "dark counts", spontaneous
+events that are not triggered by the absorption of a photon but are
+otherwise indistinguishable from correct detection of a photon.  Dark
+counts result in lowered fidelity of a sequence of measurements
+reported to other nodes or subsystems within the network.
+
+To correctly detect a photon, the detector(s) must also be physically
+prepared to detect photons (e.g., it is recovered from any prior
+detection operation).
+
+The combination of these factors determines the probability of
+photon detection and the probability of dark counts.  Ideally, the
+detector will be enabled for a long time in order to maximize the
+overlap with the WavePacket and maximize the probability of
+detection.  However, the probability of a dark count is linear in the
+amount of time that the detector is enabled, so it is desirable to
+minimize the length of the enabled period.  This tradeoff SHOULD be
+under software control, via the setting of node parameters
+([](#params)).
 
 PHY Synchronization
 =====
@@ -131,7 +179,7 @@ Timing Negotiation
 MEAS nodes MUST negotiate timing with nodes that transmit the photons
 to be measured.
 
-Parameters
+Parameters        {#params}
 ======
 
 Fixed
@@ -140,7 +188,8 @@ Fixed
 The following parameters are implicit in the type of hardware selected
 and deployed.
 
-* Wavelength envelope
+* QubitRepresentation
+* Wavelength
 * Accepted WavePacket format
 * PassiveActiveBasis
 
