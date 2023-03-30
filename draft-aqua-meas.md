@@ -144,6 +144,23 @@ For entangled photon pairs where both photons are being measured at
 independent MEAS nodes, the two nodes MAY differ in this respect.  One
 node may be Passive and the other Active.
 
+Icon
+-----
+
+The icon for the MEAS node type shows a beam splitter and two
+detectors.
+
+<figure>
+<name>Icon for the MEAS node type</name>
+<artset>
+<artwork type="svg" src="icons_MEAS.svg"/>
+<artwork type="ascii-art">
+Artwork only available as SVG (PDF and HTML)
+</artwork>
+</artset>
+</figure>
+
+
 Quantum Physical Layer
 =====
 
@@ -273,6 +290,8 @@ to execute link characterization and monitoring.
 
 Link monitoring messages are exchanged as application-level messages,
 originated by the HardwareMonitor module of the QRSA [](QNA).
+
+What questions do we need the link layer to ask?
 
 Integration with Applications
 =====
