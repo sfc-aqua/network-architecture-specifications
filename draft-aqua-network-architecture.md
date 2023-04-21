@@ -157,15 +157,15 @@ Glossary
   shared, distributed entangled states.  A Connection has an identifier.
 * *DistRuleSet*: the set of RuleSets that collectively define a
   Connection.  The set of all RuleSets that share the same ConnectionID.
-* *Initiator*: The node that creates a request for a connection.
+* *Initiator*: The node that creates a request for a connection.  At the network protocol level, roughly equivalent to the client in a client-server architecture.
 * *Link*: A quantum channel plus its end points, capable of creating
   two-party entangled quantum states. A Link has characteristics such
   as the rate at which it can attempt to make entanglement, the
   success probability and fidelity.  n.b.: This is *not* a single
   Bell pair. (n.b.2: But, a Link may be virtualized when recursive
   networking is introduced.)
-* QNode
-* Responder
+* *QNode*: Any network node with some quantum capability.
+* *Responder*: An EndNode that listens for connection requests.  A Responder creates RuleSets for two-party connections.  At the network protocol level, roughly similar to the server in a client-server system.
 * Rule: a Condition Clause-Action Clause pair
 * RuleSet
 * Stage
@@ -223,6 +223,18 @@ A Connection passes through three phases during its lifetime:
 * Shutdown: After completion of the quantum state creation and
   operations, the Connection MUST be shut down and resources
   recovered.
+
+Connections and Links
+-----
+
+A Connection will pass through one or more network links.  Connections
+are stateful, requiring state to be stored at each network node.
+Quantum states created by a link must be assigned to a specific
+connection.  Consistent assignments must be made by both nodes at the
+ends of a link.  Therefore, changes in the allocation policy triggered
+by the creation or termination of a connection passing through a link
+MUST be coordinated.  The details of this process are found in the
+Connection Setup and Teardown specification.
 
 Classical timeout and recovery
 -----
